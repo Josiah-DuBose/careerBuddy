@@ -8,7 +8,8 @@ import {
     Heading,
     Icon,
     FormControl,
-    WarningOutlineIcon
+    WarningOutlineIcon,
+    Pressable
 } from 'native-base';
 import _ from 'lodash';
 import { MaterialIcons } from "@expo/vector-icons";
@@ -92,9 +93,26 @@ const LoginForm = ({ setLoginMode }) => {
             </FormControl>
             <Button onPress={handleLogin}>Login</Button>
             <Center>
-                <Text fontSize="lg">New user?</Text>
+                <Pressable onPress={() => setLoginMode(false)}>
+                    {({ isPressed }) => {
+                        return (
+                            <Text
+                                style={{
+                                    transform: [
+                                        {
+                                            scale: isPressed ? 0.96 : 1,
+                                        },
+                                    ],
+                                }}
+                                fontSize="sm"
+                                color={isPressed ? 'cyan.700' : 'cyan.400' }
+                            >
+                                New User? Click here to create account
+                            </Text>
+                        )
+                    }}
+                </Pressable>
             </Center>
-            <Button onPress={() => setLoginMode(false)}>Create Account</Button>
         </Stack>
     );
 }
