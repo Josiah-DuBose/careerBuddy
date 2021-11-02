@@ -18,16 +18,17 @@ import auth from '@react-native-firebase/auth';
 
 const LoginForm = ({ setLoginMode }) => {
     const [formData, setFormData] = useState({ email: '', password: '' });
-    const [formErrors, setFormErrors] = useState({ email: '', password: '' });
+    const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleLogin = () => {
         setFormSubmitted(true);
+        console.log('validateForm', validateForm(formData));
         setFormErrors(validateForm(formData));
     };
 
     const textChange = (field, value) => {
-        setFormErrors({ email: '', password: '' });
+        setFormErrors({});
         setFormData({
             ...formData,
             [field]: value
@@ -46,10 +47,10 @@ const LoginForm = ({ setLoginMode }) => {
             <Center>
                 <Heading textAlign="center" mb="10">Login</Heading>
             </Center>
-            <FormControl isInvalid={formSubmitted && _.size(formErrors?.email)}>
+            <FormControl isInvalid={formSubmitted && formErrors?.email}>
                 <FormControl.Label>Email</FormControl.Label>
                 <Input
-                    isInvalid={formSubmitted && _.size(formErrors?.email)}
+                    isInvalid={formSubmitted && formErrors?.email}
                     size="lg"
                     placeholder="Email"
                     variant="outline"
@@ -68,10 +69,10 @@ const LoginForm = ({ setLoginMode }) => {
                     {formErrors?.email}
                 </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={formSubmitted && _.size(formErrors?.password)}>
-                <FormControl.Label>Email</FormControl.Label>
+            <FormControl isInvalid={formSubmitted && formErrors?.password}>
+                <FormControl.Label>Password</FormControl.Label>
                 <Input
-                    isInvalid={formSubmitted && _.size(formErrors?.password)}
+                    isInvalid={formSubmitted && formErrors?.password}
                     size="lg"
                     placeholder="Password"
                     variant="outline"
