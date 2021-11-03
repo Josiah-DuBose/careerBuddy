@@ -28,9 +28,12 @@ const CreateUserForm = ({ setLoginMode }) => {
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
 
-    const handleCreate = () => {
+    const handleCreate = async () => {
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
+
+        const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
+        console.log('response', response);
     };
 
     const textChange = (field, value) => {

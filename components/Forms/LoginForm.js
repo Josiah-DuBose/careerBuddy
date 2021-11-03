@@ -21,10 +21,12 @@ const LoginForm = ({ setLoginMode }) => {
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         setFormSubmitted(true);
-        console.log('validateForm', validateForm(formData));
         setFormErrors(validateForm(formData));
+
+        const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
+        console.log('response', response);
     };
 
     const textChange = (field, value) => {

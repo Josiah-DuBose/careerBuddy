@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
-import Login from './components/Login';
 import { NativeBaseProvider, Center } from 'native-base';
+import Login from './components/Login';
 import Loading from './components/Loading';
+import Home from './components/Home';
 
 const App = () => {
   const [initializing, setInitializing] = useState(true);
