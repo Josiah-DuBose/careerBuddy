@@ -4,6 +4,8 @@ import { NativeBaseProvider, Center } from 'native-base';
 import Login from './components/Login';
 import Loading from './components/Loading';
 import Home from './components/Home';
+import ErrorBoundary from './components/ErrorBoundary';
+import AlertProvider from './components/Alert';
 
 const App = () => {
   const [initializing, setInitializing] = useState(true);
@@ -12,6 +14,7 @@ const App = () => {
 
   const onAuthStateChanged = (user) => {
     setUser(user);
+    console.log('user', user);
     if (initializing) setInitializing(false);
   }
 
@@ -21,15 +24,18 @@ const App = () => {
   }, []);
 
   return (
-    <NativeBaseProvider>
-      {initializing && <Loading />}
-      {!initializing && (
-        <Center flex={1} px="3">
-          {!user && <Login />}
-          {user && <Home />}
-        </Center>
-      )}
-    </NativeBaseProvider>
+    <ErrorBoundary>
+      <NativeBaseProvider>
+        {initializing && <Loading />}
+        {!initializing && (
+          <Center flex={1} px="3">
+            {!user && <Login />}
+            {user && <Home />}
+          </Center>
+        )}
+        <AlertProvider />
+      </NativeBaseProvider>
+    </ErrorBoundary>
   );
 };
 
