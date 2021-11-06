@@ -17,12 +17,13 @@ import _ from 'lodash';
 import auth from '@react-native-firebase/auth';
 import { MaterialIcons } from "@expo/vector-icons";
 import { validateForm } from '../../helpers/general';
-import { actions, getLoginMode } from '../../reducers/user';
-import { createUser, updateUser } from '../../helpers/db';
+import { actions as userActions, getLoginMode } from '../../reducers/user';
+import { actions as generalActions } from '../../reducers/general';
+import { createUser } from '../../helpers/db';
 
 
 const CreateUserForm = (props) => {
-    const { setLoginMode, updateUser } = props;
+    const { setLoginMode, updateUser, addAlert } = props;
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -43,7 +44,9 @@ const CreateUserForm = (props) => {
             const user = await createUser({ ...userData, ...formData });
             updateUser(user);
         } catch (err) {
-            console.error('Error creating user: ', err);
+            console.error('Error creating user: ', err?.message);
+            const msg = _.get(err, 'message');
+            if (msg.includes('email-already-in-use')) addAlert({ status: 'error', message: 'The email address is already in use' });
         }
     };
 
@@ -132,7 +135,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    ...bindActionCreators(actions, dispatch),
+    ...bindActionCreators(userActions, dispatch),
+    ...bindActionCreators(generalActions, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateUserForm);
