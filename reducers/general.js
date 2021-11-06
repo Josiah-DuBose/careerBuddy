@@ -18,12 +18,12 @@ export const getLoginMode = state => state?.user?.login;
 
 export const reducer = ((state = initialState, action = {}) => {
     switch (action.type) {
-        case UPDATE_ALERT:
+        case types.UPDATE_ALERT:
             return {
                 ...state,
                 alerts: action?.value,
             };
-        case SET_LOGIN_MODE:
+        case types.SET_LOGIN_MODE:
             return {
                 ...state,
                 alerts: action?.value,

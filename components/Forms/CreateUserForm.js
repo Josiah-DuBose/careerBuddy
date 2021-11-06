@@ -12,9 +12,9 @@ import {
     Pressable
 } from 'native-base';
 import _ from 'lodash';
+import auth from '@react-native-firebase/auth';
 import { MaterialIcons } from "@expo/vector-icons";
 import { validateForm } from '../../helpers/general';
-import auth from '@react-native-firebase/auth';
 
 
 const CreateUserForm = ({ setLoginMode }) => {
@@ -24,6 +24,7 @@ const CreateUserForm = ({ setLoginMode }) => {
         firstName: '',
         lastName: '',
         yearsExperience: '',
+        desiredJobTitle: '',
     });
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -33,7 +34,6 @@ const CreateUserForm = ({ setLoginMode }) => {
         setFormErrors(validateForm(formData));
 
         const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
-        console.log('response', response);
     };
 
     const textChange = (field, value) => {
@@ -49,7 +49,8 @@ const CreateUserForm = ({ setLoginMode }) => {
         password: 'lock',
         firstName: 'person',
         lastName: 'person',
-        yearsExperience: 'work',
+        desiredJobTitle: 'work',
+        yearsExperience: 'schedule',
     };
 
     return (

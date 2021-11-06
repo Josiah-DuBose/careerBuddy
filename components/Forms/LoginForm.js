@@ -14,6 +14,7 @@ import {
 import _ from 'lodash';
 import { MaterialIcons } from "@expo/vector-icons";
 import { validateForm } from '../../helpers/general';
+import { getUser } from '../../helpers/db';
 import auth from '@react-native-firebase/auth';
 
 const LoginForm = ({ setLoginMode }) => {
@@ -27,6 +28,10 @@ const LoginForm = ({ setLoginMode }) => {
 
         const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
         console.log('response', response);
+        const userData = response?.user.toJSON()
+        console.log('userData', userData);
+        const user = await getUser(userData?.uid);
+
     };
 
     const textChange = (field, value) => {
