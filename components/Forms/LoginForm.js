@@ -12,12 +12,16 @@ import {
     Pressable
 } from 'native-base';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { MaterialIcons } from "@expo/vector-icons";
 import { validateForm } from '../../helpers/general';
 import { getUser } from '../../helpers/db';
+import { actions, getLoginMode } from '../../reducers/user';
 import auth from '@react-native-firebase/auth';
 
-const LoginForm = ({ setLoginMode }) => {
+const LoginForm = (props) => {
+    const { setLoginMode, updateUser } = props;
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -31,7 +35,7 @@ const LoginForm = ({ setLoginMode }) => {
         const userData = response?.user.toJSON()
         console.log('userData', userData);
         const user = await getUser(userData?.uid);
-
+        updateUser(user);
     };
 
     const textChange = (field, value) => {
@@ -125,4 +129,12 @@ const LoginForm = ({ setLoginMode }) => {
     );
 }
 
-export default LoginForm;
+const mapStateToProps = (state) => ({
+    login: getLoginMode(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    ...bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

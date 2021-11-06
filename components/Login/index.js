@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import { getLoginMode } from '../../reducers/user';
 import LoginForm from '../Forms/LoginForm';
 import CreateUserForm from '../Forms/CreateUserForm';
 
-const Login = () => {
-    const [loginMode, setLoginMode] = useState(true);
-
+const Login = (props) => {
+    const { loginMode } = props;
     return (
         <>
-        {loginMode && <LoginForm setLoginMode={setLoginMode} />}
-        {!loginMode && <CreateUserForm setLoginMode={setLoginMode} />}
+        {loginMode && <LoginForm />}
+        {!loginMode && <CreateUserForm />}
         </>
     );
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+    loginMode: getLoginMode(state)
+});
+
+export default connect(mapStateToProps)(Login);

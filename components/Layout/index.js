@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Center } from 'native-base';
 import Loading from '../Loading';
 import Login from '../Login';
 import Home from '../Home';
 import { getUser, actions, getUserLoading } from '../../reducers/user';
-import { bindActionCreators } from 'redux';
 
 const Layout = (props) => {
     const { user, loading } = props;

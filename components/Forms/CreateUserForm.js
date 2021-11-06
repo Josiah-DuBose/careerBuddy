@@ -11,13 +11,18 @@ import {
     WarningOutlineIcon,
     Pressable
 } from 'native-base';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 import auth from '@react-native-firebase/auth';
 import { MaterialIcons } from "@expo/vector-icons";
 import { validateForm } from '../../helpers/general';
+import { actions, getLoginMode } from '../../reducers/user';
+import { createUser, updateUser } from '../../helpers/db';
 
 
-const CreateUserForm = ({ setLoginMode }) => {
+const CreateUserForm = (props) => {
+    const { setLoginMode, updateUser } = props;
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -32,8 +37,14 @@ const CreateUserForm = ({ setLoginMode }) => {
     const handleCreate = async () => {
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
-
-        const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
+        try {
+            const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
+            const userData = response?.user.toJSON();
+            const user = await createUser(userData);
+            updateUser(user);
+        } catch (err) {
+            console.error('Error creating user: ', err);
+        }
     };
 
     const textChange = (field, value) => {
@@ -114,6 +125,14 @@ const CreateUserForm = ({ setLoginMode }) => {
             </Center>
         </Stack>
     );
-}
+};
 
-export default CreateUserForm;
+const mapStateToProps = (state) => ({
+    login: getLoginMode(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    ...bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateUserForm);
