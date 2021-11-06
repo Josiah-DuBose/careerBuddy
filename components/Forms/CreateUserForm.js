@@ -40,7 +40,7 @@ const CreateUserForm = (props) => {
         try {
             const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
             const userData = response?.user.toJSON();
-            const user = await createUser(userData);
+            const user = await createUser({ ...userData, ...formData });
             updateUser(user);
         } catch (err) {
             console.error('Error creating user: ', err);

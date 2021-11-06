@@ -30,12 +30,16 @@ const LoginForm = (props) => {
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
 
-        const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
-        console.log('response', response);
-        const userData = response?.user.toJSON()
-        console.log('userData', userData);
-        const user = await getUser(userData?.uid);
-        updateUser(user);
+        try {
+            const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
+            console.log('response', response);
+            const userData = response?.user.toJSON()
+            console.log('userData', userData);
+            const user = await getUser(userData?.uid);
+            updateUser(user);
+        } catch (err) {
+            console.error('Error during login: ', err);
+        }
     };
 
     const textChange = (field, value) => {
@@ -117,7 +121,7 @@ const LoginForm = (props) => {
                                     ],
                                 }}
                                 fontSize="sm"
-                                color={isPressed ? 'cyan.700' : 'cyan.400' }
+                                color={isPressed ? 'cyan.700' : 'cyan.400'}
                             >
                                 New User? Click here to create account
                             </Text>
