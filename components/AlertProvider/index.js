@@ -14,9 +14,10 @@ import { actions, getAlerts } from '../../reducers/general';
 
 const AlertProvider = (props) => {
     const { alerts } = props;
+    console.log('alerts', alerts)
     return (
         <Stack space={3} w="100%">
-            {alerts.map(({ status, message, show }) => {
+            {alerts.map(({ status, message, show, id }) => {
                 return (
                     <>
                         {show && (
@@ -31,6 +32,7 @@ const AlertProvider = (props) => {
                                         </HStack>
                                         <IconButton
                                             variant="unstyled"
+                                            onPress={() => dismissAlert(id)}
                                             icon={<CloseIcon size="3" color="coolGray.600" />}
                                         />
                                     </HStack>

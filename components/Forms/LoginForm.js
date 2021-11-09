@@ -25,20 +25,23 @@ const LoginForm = (props) => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
+    console.log('formErrors', formErrors)
 
     const handleLogin = async () => {
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
 
-        try {
-            const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
-            console.log('response', response);
-            const userData = response?.user.toJSON()
-            console.log('userData', userData);
-            const user = await getUser(userData?.uid);
-            updateUser(user);
-        } catch (err) {
-            console.error('Error during login: ', err);
+        if(_.isEmpty(formErrors)) {
+            try {
+                const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
+                console.log('response', response);
+                const userData = response?.user.toJSON()
+                console.log('userData', userData);
+                const user = await getUser(userData?.uid);
+                updateUser(user);
+            } catch (err) {
+                console.error('Error during login: ', err);
+            }
         }
     };
 
@@ -60,7 +63,7 @@ const LoginForm = (props) => {
             }}
         >
             <Center>
-                <Heading textAlign="center" mb="10">Login</Heading>
+                <Heading textAlign="center" mb="3">Login</Heading>
             </Center>
             <FormControl isInvalid={formSubmitted && formErrors?.email}>
                 <FormControl.Label>Email</FormControl.Label>

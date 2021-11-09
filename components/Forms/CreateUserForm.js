@@ -34,19 +34,22 @@ const CreateUserForm = (props) => {
     });
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
-
+    console.log('formErrors', formErrors);
     const handleCreate = async () => {
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
-        try {
-            const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
-            const userData = response?.user.toJSON();
-            const user = await createUser({ ...userData, ...formData });
-            updateUser(user);
-        } catch (err) {
-            console.error('Error creating user: ', err?.message);
-            const msg = _.get(err, 'message');
-            if (msg.includes('email-already-in-use')) addAlert({ status: 'error', message: 'The email address is already in use' });
+
+        if(_.isEmpty(formErrors)) {
+            try {
+                const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
+                const userData = response?.user.toJSON();
+                const user = await createUser({ ...userData, ...formData });
+                updateUser(user);
+            } catch (err) {
+                console.error('Error creating user: ', err?.message);
+                const msg = _.get(err, 'message');
+                if (msg.includes('email-already-in-use')) addAlert({ status: 'error', message: 'This email address is already in use' });
+            }
         }
     };
 
@@ -77,13 +80,15 @@ const CreateUserForm = (props) => {
             }}
         >
             <Center>
-                <Heading textAlign="center" mb="10">Create Account</Heading>
+                <Heading textAlign="center" mb={_.isEmpty(formErrors) ? '3': '-2'}>
+                    Create Account
+                </Heading>
             </Center>
             {Object.keys(formData).map(field => (
-                <FormControl key={field} isInvalid={formSubmitted && formErrors?.field}>
+                <FormControl key={field} isInvalid={formSubmitted && !!formErrors[field]}>
                     <FormControl.Label>{_.startCase(field)}</FormControl.Label>
                     <Input
-                        isInvalid={formSubmitted && formErrors?.field}
+                        isInvalid={formSubmitted && !!formErrors[field]}
                         size="lg"
                         placeholder={_.startCase(field)}
                         variant="outline"
@@ -100,7 +105,7 @@ const CreateUserForm = (props) => {
                         }
                     />
                     <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                        {formErrors?.field}
+                        {formErrors[field]}
                     </FormControl.ErrorMessage>
                 </FormControl>
             ))}

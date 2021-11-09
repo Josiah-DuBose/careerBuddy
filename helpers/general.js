@@ -6,7 +6,6 @@ export const validateEmail = (email) => {
 }
 
 export const validateForm = (formData) => {
-    console.log('formData',formData)
     const formErrors = {};
     Object.entries(formData).forEach(([key, value]) => {
         switch (key) {
@@ -17,6 +16,6 @@ export const validateForm = (formData) => {
                 if (!value) formErrors[key] = `${_.startCase(key)} is required`;
         }
     });
-
+    console.log('formErrors func', formErrors);
     return formErrors;
 }

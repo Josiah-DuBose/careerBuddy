@@ -25,18 +25,21 @@ export const reducer = ((state = initialState, action = {}) => {
             const newAlert = {
                 message,
                 status,
-                show: true,
                 timestamp: new Date().getTime(),
                 id: uuidv4(),
             };
-
+            console.log('ADD_ALERT', newAlert)
             return {
                 ...state,
                 alerts: [...state.alerts, newAlert],
             };
         case types.DISMISS_ALERT:
-            const currentAlerts = state?.alerts;
-            _.set(_.find(currentAlerts, alert => alert.id === action?.value), 'show', false);
+            console.log('DISMISS_ALERT', action.value)
+            const updatedAlerts = _.filter(_.get(state, 'alerts'), alert => alert.id !== action?.value);
+            return {
+                ...state,
+                alerts: updatedAlerts,
+            };
         default:
             return state;
     }
