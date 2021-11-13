@@ -1,19 +1,12 @@
 import React from 'react';
 import {
-    Button,
     ScrollView,
     Flex,
     Center,
-    Heading,
     VStack
 } from 'native-base';
-import auth from '@react-native-firebase/auth';
 
 const Home = () => {
-    const handleLogOut = () => {
-        auth().signOut();
-    };
-
     return (
         <ScrollView>
             <Center mt="20">
@@ -26,10 +19,6 @@ const Home = () => {
                             color: "coolGray.800",
                         }}
                     >
-                        <Heading>Dashboard</Heading>
-                        <Center>
-                            <Button onPress={handleLogOut}>Log Out</Button>
-                        </Center>
                     </Flex>
                 </VStack>
             </Center>

@@ -6,12 +6,18 @@ import Loading from '../Loading';
 import Login from '../Login';
 import Home from '../Home';
 import { getUser, actions, getUserLoading } from '../../reducers/user';
+import AppBar from '../Toolbar';
 
 const Layout = (props) => {
     const { user, loading } = props;
     return (
         <>
-            {loading && <Loading />}
+            {user && <AppBar />}
+            {loading && (
+                <Center flex={1} px="3">
+                    <Loading />
+                </Center>
+            )}
             {!loading && (
                 <Center flex={1} px="3">
                     {!user && <Login />}

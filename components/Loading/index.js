@@ -3,26 +3,26 @@ import PropTypes from 'prop-types';
 import {
   Spinner,
   HStack,
-  Heading,
-} from "native-base";
+  Heading
+} from "native-base"
 
-const Loading = ({ message }) => {
+export const Loading = ({ message }) => {
   return (
     <HStack space={2} alignItems="center">
-      <Spinner accessibilityLabel="Loading App" />
+      <Spinner accessibilityLabel="Loading posts" />
       <Heading color="primary.500" fontSize="md">
-        {message || 'Loading...'}
+        {message || 'Loading'}
       </Heading>
     </HStack>
   )
-};
+}
 
 Loading.defaultProps = {
-    message: '',
+  message: '',
 };
 
 Loading.propTypes = {
-    message: PropTypes.string,
+  message: PropTypes.string,
 };
 
 export default Loading;

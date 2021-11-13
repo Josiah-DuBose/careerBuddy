@@ -16,6 +16,5 @@ export const validateForm = (formData) => {
                 if (!value) formErrors[key] = `${_.startCase(key)} is required`;
         }
     });
-    console.log('formErrors func', formErrors);
     return formErrors;
 }

@@ -1,21 +1,20 @@
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
-export const getUser = async (uid) => {
-    console.log('getUser', uid);
+export const getUser = async () => {
+    const doc = await firestore().collection('users').doc(auth().currentUser.uid).get();
+    return doc.data();
 };
 
 export const createUser = async (data) => {
-    console.log('createUser', data);
     const { desiredJobTitle, email, firstName, lastName, yearsExperience, uid } = data;
-    const response = await firestore().collection('users').add({
+    return firestore().collection('users').doc(uid).set({
         desiredJobTitle,
         email,
         firstName,
         lastName,
         yearsExperience,
-        uid
     });
-    console.log('response', response);
 };
 
 export const updateUser = async (uid, data) => {

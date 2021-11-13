@@ -19,7 +19,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { validateForm } from '../../helpers/general';
 import { actions as userActions, getLoginMode } from '../../reducers/user';
 import { actions as generalActions } from '../../reducers/general';
-import { createUser } from '../../helpers/db';
+import { createUser, getUser } from '../../helpers/db';
 
 
 const CreateUserForm = (props) => {
@@ -34,8 +34,9 @@ const CreateUserForm = (props) => {
     });
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
-    console.log('formErrors', formErrors);
+
     const handleCreate = async () => {
+        userLoading(true);
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
 
@@ -43,12 +44,21 @@ const CreateUserForm = (props) => {
             try {
                 const response = await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
                 const userData = response?.user.toJSON();
-                const user = await createUser({ ...userData, ...formData });
+                await createUser({ ...userData, ...formData });
+
+                const user = await getUser();
                 updateUser(user);
             } catch (err) {
-                console.error('Error creating user: ', err?.message);
-                const msg = _.get(err, 'message');
-                if (msg.includes('email-already-in-use')) addAlert({ status: 'error', message: 'This email address is already in use' });
+                const message = _.get(err, 'message');
+
+                if (message.includes('[auth/email-already-in-use]')) {
+                    setFormErrors({
+                        ...formErrors,
+                        email: 'This email address is already in use by another account.',
+                    });
+                }
+            } finally {
+                userLoading(false);
             }
         }
     };

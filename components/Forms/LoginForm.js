@@ -21,26 +21,25 @@ import { actions, getLoginMode } from '../../reducers/user';
 import auth from '@react-native-firebase/auth';
 
 const LoginForm = (props) => {
-    const { setLoginMode, updateUser } = props;
+    const { setLoginMode, updateUser, userLoading } = props;
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [formErrors, setFormErrors] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
-    console.log('formErrors', formErrors)
 
     const handleLogin = async () => {
+        userLoading(true);
         setFormSubmitted(true);
         setFormErrors(validateForm(formData));
 
         if(_.isEmpty(formErrors)) {
             try {
-                const response = await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
-                console.log('response', response);
-                const userData = response?.user.toJSON()
-                console.log('userData', userData);
-                const user = await getUser(userData?.uid);
+                await auth().signInWithEmailAndPassword(formData?.email, formData?.password);
+                const user = await getUser();
                 updateUser(user);
             } catch (err) {
                 console.error('Error during login: ', err);
+            } finally {
+                userLoading(false);
             }
         }
     };

@@ -23,6 +23,7 @@ export const getLoginMode = state => state?.user?.login;
 export const reducer = ((state = initialState, action = {}) => {
     switch (action.type) {
         case types.UPDATE_USER:
+            console.log('UPDATE_USER', action?.value);
             return {
                 ...state,
                 profile: action?.value,
