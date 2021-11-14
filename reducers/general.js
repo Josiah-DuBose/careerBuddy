@@ -3,19 +3,30 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const initialState = {
     alerts: [],
+    currentRoute: 'login',
+    routeNames: [
+        'login',
+        'create',
+        'dashboard',
+    ],
+    drawerOpen: false,
 };
 
 const types = {
     ADD_ALERT: 'ADD_ALERT',
     DISMISS_ALERT: 'DISMISS_ALERT',
+    TOGGLE_DRAWER: 'TOGGLE_DRAWER',
 };
 
 export const actions = {
     addAlert: (value) => ({ type: types.ADD_ALERT, value }),
     dismissAlert: (value) => ({ type: types.DISMISS_ALERT, value }),
+    toggleDrawer: () => ({ type: types.TOGGLE_DRAWER }),
 };
 
-export const getAlerts = state => state?.user?.alerts;
+export const getAlerts = state => state?.general?.alerts;
+export const getCurrentRoute = state => state?.general?.currentRoute;
+export const getDrawerOpen = state => state?.general?.drawerOpen;
 
 export const reducer = ((state = initialState, action = {}) => {
     switch (action.type) {
@@ -39,6 +50,11 @@ export const reducer = ((state = initialState, action = {}) => {
             return {
                 ...state,
                 alerts: updatedAlerts,
+            };
+        case types.TOGGLE_DRAWER:
+            return {
+                ...state,
+                drawerOpen: !state.drawerOpen,
             };
         default:
             return state;

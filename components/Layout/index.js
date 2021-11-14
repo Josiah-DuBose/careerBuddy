@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Center } from 'native-base';
 import Loading from '../Loading';
 import Login from '../Login';
-import Home from '../Home';
+import Dashboard from '../Dashboard';
 import { getUser, actions, getUserLoading } from '../../reducers/user';
 import AppBar from '../Toolbar';
 
@@ -21,7 +21,7 @@ const Layout = (props) => {
             {!loading && (
                 <Center flex={1} px="3">
                     {!user && <Login />}
-                    {user && <Home />}
+                    {user && <Dashboard />}
                 </Center>
             )}
         </>
