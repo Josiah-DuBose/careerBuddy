@@ -23,7 +23,7 @@ import { createUser, getUser } from '../../helpers/db';
 
 
 const CreateUserForm = (props) => {
-    const { setLoginMode, updateUser, addAlert } = props;
+    const { setLoginMode, updateUser } = props;
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -121,7 +121,7 @@ const CreateUserForm = (props) => {
             ))}
             <Button onPress={handleCreate}>Create Account</Button>
             <Center>
-                <Pressable onPress={() => setLoginMode(true)}>
+                <Pressable onPress={() => props.navigation.navigate('Login')}>
                     {({ isPressed }) => {
                         return (
                             <Text

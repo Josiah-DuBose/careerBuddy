@@ -2,17 +2,20 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { NativeBaseProvider } from 'native-base';
+import { NavigationContainer } from '@react-navigation/native';
 import reducers from './reducers';
-import Layout from './components/Layout';
+import Drawer from './components/Drawer';
 
 const store = createStore(reducers);
 
 const App = () => {
   return (
     <Provider store={store}>
-      <NativeBaseProvider>
-        <Layout />
-      </NativeBaseProvider>
+      <NavigationContainer>
+        <NativeBaseProvider>
+          <Drawer />
+        </NativeBaseProvider>
+      </NavigationContainer>
     </Provider>
   );
 };
